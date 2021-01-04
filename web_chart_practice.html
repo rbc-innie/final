@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>My Chart.js Chart</title>
+</head>
+<body>
+	<header></header>
+	<section>
+		<article>
+			<form name="calculate">
+				Face value:
+				<input type="text" name="Face_value">
+				<br>
+				Stated rate(%):
+				<input type="text" name="Stated_rate">
+				<br>
+				Market rate(%):
+				<input type="text" name="Market_rate">
+				<br>
+				period:
+				<input type="text" name="period">
+				<br>
+				Year to maturity:
+				<input rtype="text" name="year">
+				<br>
+				<input type="button" value="Process" onclick="process()">
+				<br>
+				Price_of_the_bond:
+				<input type="text" name="Price_of_the_bond">
+			</form>
+
+			<script type="text/javascript">
+				function process()
+				{
+					//variables
+					var Face_value = parseFloat(document.calculate.Face_value.value);
+					var Period = parseFloat(document.calculate.period.value);
+					var Stated_rate= parseFloat(document.calculate.Stated_rate.value)/100;
+					var Market_rate = parseFloat(document.calculate.Market_rate.value)/100;
+					var Year = parseFloat(document.calculate.year.value);
+					//calculation
+					var length = Period*Year;
+					var interest_rate_book_value = Face_value*Stated_rate;
+					var principal_present_value = Face_value/Power((1+Market_rate/Period),length);
+					var labels = new Array()
+					for (var i = 1; i <= length; i++) {
+						labels[i]=i
+					};
+					var factor=new Array()
+					for (var i = 1; i <= length; i++) {
+						factor[i]=1/power((1+Market_rate/Period),i)
+					};
+					var present_value= new Array()
+					for (var i = 1; i <= length; i++) {
+						present_value[i]=interest_rate_book_value*factor[i]
+					};
+					var Total_interest = 0//in present value
+					for (var i = 1.length - 1; i >= 0; i--) {
+						Total_interest+=present_value[i]
+					};
+					Price_of_the_bond = principal_present_value+Total_interest;
+
+					document.calculate.Price_of_the_bond.value = length
+				}//function ends
+				document.write(Price_of_the_bond);
+				</script>
+			</article>
+	</section>
+		<canvas id="myChart"></canvas>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+		<script type="text/javascript">
+		var ctx = document.getElementById('myChart').getContext('2d');
+		var chart = new Chart(ctx,{
+		type:'bar',//bar,horizontalbar,pie,line,doughnut.radar,polarArea
+
+		data:{
+			labels=document.process().
+			datasets:[{
+				label:'Population',
+				backgroundColor: 'rgb(180, 99, 132)',
+            	borderColor: 'rgb(255, 99, 132)',
+				data:[617594,181045,153060,106519,105162,95072]
+
+				}]
+			},
+			options:{}
+
+		});
+	</script>
+</body>
+</html>
